@@ -15,24 +15,27 @@ proveniência, namespaced por paciente.
 ## Visão geral
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":50,"rankSpacing":62}}}%%
 flowchart TB
-    subgraph SRC["Camadas do HealthOS (entrada)"]
-        ASL["ASL<br/>análise linguística"]
-        VDLP["VDLP<br/>15 dimensões de ℳ"]
-        GEM["GEM<br/>grafo mental"]
+    subgraph SRC["Camadas do HealthOS · entrada"]
+        direction LR
+        ASL("ASL<br/>análise linguística")
+        VDLP("VDLP<br/>15 dimensões de ℳ")
+        GEM("GEM<br/>grafo mental")
     end
 
-    PROJ["Prompt de projeção<br/>project_to_memory.md"]
-    SCHEMA["projeção.json<br/>(memory_projection.schema.json)"]
+    PROJ("Prompt de projeção<br/>project_to_memory.md")
+    SCHEMA("projeção.json<br/>memory_projection.schema.json")
 
-    subgraph STORE["3 stores coordenados — 1 SQLite"]
-        S1["Episódio + Evidência<br/>documento + vetor"]
-        S2["Estado dimensional ℳ<br/>vetor 17-D + série temporal"]
-        S3["Grafo GEM<br/>property graph bi-temporal"]
+    subgraph STORE["3 stores coordenados · 1 SQLite"]
+        direction LR
+        S1("Episódio + Evidência<br/>documento + vetor")
+        S2("Estado dimensional ℳ<br/>vetor 17-D + série temporal")
+        S3("Grafo GEM<br/>property graph bi-temporal")
     end
 
-    HYB["Recuperação híbrida<br/>assemble_context"]
-    AGENT["Agente LLM"]
+    HYB("Recuperação híbrida<br/>assemble_context")
+    AGENT(["Agente LLM"])
 
     ASL --> PROJ
     VDLP --> PROJ
@@ -45,6 +48,23 @@ flowchart TB
     S2 --> HYB
     S3 --> HYB
     HYB -->|bundle summary-only| AGENT
+
+    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
+    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
+    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
+    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
+    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
+    classDef orange fill:#FFF1E0,stroke:#FF9F0A,stroke-width:1.2px,color:#3D2A00
+    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
+    class ASL teal
+    class VDLP indigo
+    class GEM purple
+    class PROJ,SCHEMA gray
+    class S1 blue
+    class S2 green
+    class S3 orange
+    class HYB indigo
+    class AGENT blue
 ```
 
 ---
@@ -61,17 +81,18 @@ Tudo num único arquivo **SQLite**. O grafo só é usado onde causalidade/tempor
 importam (GEM) — ASL e VDLP não são forçados num grafo.
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":42,"rankSpacing":58}}}%%
 flowchart LR
-    subgraph SQLite["memory.db (namespaced por patient_id)"]
+    subgraph SQLite["memory.db · namespaced por patient_id"]
         direction TB
-        E["episodes"]
-        EC["evidence_chunks<br/>+ embedding BLOB"]
-        DS["dimensional_states<br/>vetor 17-D"]
-        GE["gem_events"]
-        GED["gem_edges"]
-        GC["gem_clusters"]
-        GF["gem_flows"]
-        GP["gem_pathways"]
+        E("episodes")
+        EC("evidence_chunks<br/>+ embedding BLOB")
+        DS("dimensional_states<br/>vetor 17-D")
+        GE("gem_events")
+        GED("gem_edges")
+        GC("gem_clusters")
+        GF("gem_flows")
+        GP("gem_pathways")
     end
 
     E --> EC
@@ -80,6 +101,17 @@ flowchart LR
     GE --> GC
     GC --> GF
     GC --> GP
+
+    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
+    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
+    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
+    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
+    classDef orange fill:#FFF1E0,stroke:#FF9F0A,stroke-width:1.2px,color:#3D2A00
+    class E,EC blue
+    class DS green
+    class GE,GED purple
+    class GC teal
+    class GF,GP orange
 ```
 
 ### Espinha bi-temporal
@@ -95,6 +127,7 @@ IDs lógicos estáveis (ex.: `C_LUTO_RUMINACAO`, `EPE_RECLAMAR_AGENCIA`) fazem a
 memória **acumular e superar** ao longo do tratamento.
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","actorBkg":"#EAF2FF","actorBorder":"#0A84FF","actorTextColor":"#0A2540","signalColor":"#8E8E93","signalTextColor":"#1D1D1F","noteBkgColor":"#F4EBFF","noteBorderColor":"#BF5AF2","noteTextColor":"#1D1D1F","sequenceNumberColor":"#FFFFFF"}}}%%
 sequenceDiagram
     participant S2 as Sessão (mar)
     participant S5 as Sessão (jun)
@@ -192,13 +225,26 @@ bundle = retrieve.assemble_context(conn, "PACIENTE_001",
 expande o contexto relacional → trajetória dá a tendência**.
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":46,"rankSpacing":54}}}%%
 flowchart LR
-    Q["query do agente"] --> V["1. busca vetorial<br/>nos trechos de evidência"]
-    V -->|gem_event_id na proveniência| G["2. expande vizinhança<br/>causal no grafo GEM"]
-    G --> P["3. anexa pathways ativos<br/>+ clusters atrito/alavancagem"]
-    P --> S["4. estado dimensional<br/>mais recente + trajetória"]
-    S --> B["bundle enxuto<br/>+ disclaimer"]
-    B --> A["agente LLM"]
+    Q(["query do agente"]) --> V("1 · busca vetorial<br/>nos trechos de evidência")
+    V -->|gem_event_id na proveniência| G("2 · expande vizinhança<br/>causal no grafo GEM")
+    G --> P("3 · anexa pathways ativos<br/>+ clusters atrito/alavancagem")
+    P --> S("4 · estado dimensional<br/>mais recente + trajetória")
+    S --> B("bundle enxuto<br/>+ disclaimer")
+    B --> A(["agente LLM"])
+
+    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
+    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
+    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
+    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
+    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
+    class Q gray
+    class V blue
+    class G indigo
+    class P purple
+    class S green
+    class B,A blue
 ```
 
 Concretamente:
@@ -220,24 +266,29 @@ diagnósticos — o que **emergiu**) e `.epe` (caminhos emergenáveis — o que 
 emergir, ligando atrito a alavancagem).
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":46,"rankSpacing":70}}}%%
 flowchart LR
-    subgraph AJE[".aje — eventos"]
-        e1["evento: insônia"]
-        e2["evento: ruminação"]
-        e3["evento: reclamar p/ chefe"]
+    subgraph AJE[".aje · eventos"]
+        direction TB
+        e1("insônia")
+        e2("ruminação")
+        e3("reclamar p/ chefe")
     end
-    subgraph IRE[".ire — clusters"]
-        cF["C_LUTO_RUMINACAO<br/>(friction)"]
-        cL["C_AGENCIA_VOZ<br/>(leverage)"]
+    subgraph IRE[".ire · clusters"]
+        direction TB
+        cF("C_LUTO_RUMINACAO<br/>atrito")
+        cL("C_AGENCIA_VOZ<br/>alavancagem")
     end
     e1 --> cF
     e2 --> cF
     e3 --> cL
-    cF -->|".e fluxo diagnóstico"| cL
-    cF -.->|".epe EPE_RECLAMAR_AGENCIA<br/>potencial emergenável"| cL
+    cF ==>|".e · fluxo diagnóstico"| cL
+    cF -.->|".epe · EPE_RECLAMAR_AGENCIA<br/>potencial emergenável"| cL
 
-    classDef friction fill:#fde,stroke:#c69
-    classDef leverage fill:#dfe,stroke:#6c9
+    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
+    classDef friction fill:#FFE9F0,stroke:#FF2D55,stroke-width:1.4px,color:#3D0011
+    classDef leverage fill:#E6F9EE,stroke:#30D158,stroke-width:1.4px,color:#06321A
+    class e1,e2,e3 gray
     class cF friction
     class cL leverage
 ```
@@ -247,27 +298,40 @@ flowchart LR
 ## Como enviar ao LLM / atrelar a um agente
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":40,"rankSpacing":58}}}%%
 flowchart TB
     DB[("memory.db")]
-    subgraph A["Opção A — Servidor MCP (read-only)"]
-        MCP["mcp_server.py<br/>FastMCP (stdio)"]
-        T1["memory_assemble_context"]
-        T2["memory_search_evidence"]
-        T3["memory_state_trajectory"]
-        T4["memory_graph_neighborhood"]
-        T5["memory_emergenable_pathways"]
-        T6["memory_as_of"]
+    subgraph A["Opção A · Servidor MCP · read-only"]
+        MCP("mcp_server.py<br/>FastMCP · stdio")
+        T1("memory_assemble_context")
+        T2("memory_search_evidence")
+        T3("memory_state_trajectory")
+        T4("memory_graph_neighborhood")
+        T5("memory_emergenable_pathways")
+        T6("memory_as_of")
     end
-    subgraph B["Opção B — Contexto direto"]
-        AC["retrieve.assemble_context()"]
+    subgraph B["Opção B · Contexto direto"]
+        AC("retrieve.assemble_context()")
     end
-    CLIENT["Claude Code / Desktop / Cursor"]
-    PROMPT["system / developer message"]
+    CLIENT(["Claude Code / Desktop / Cursor"])
+    PROMPT("system / developer message")
 
     DB --> MCP
     MCP --> T1 & T2 & T3 & T4 & T5 & T6
     T1 & T2 & T3 & T4 & T5 & T6 --> CLIENT
     DB --> AC --> PROMPT
+
+    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
+    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
+    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
+    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
+    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
+    class DB indigo
+    class MCP blue
+    class T1,T2,T3,T4,T5,T6 teal
+    class AC green
+    class CLIENT blue
+    class PROMPT gray
 ```
 
 ### A) Servidor MCP (recomendado)
@@ -319,6 +383,7 @@ VDLP colapsa cada sessão num ponto de ℳ. Para similaridade usamos uma ordena�
 não reordene sem migrar os vetores gravados.
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","lineColor":"#C7C7CC"}}}%%
 mindmap
   root((Espaço Mental ℳ))
     Afeto
@@ -394,12 +459,24 @@ patient-memory/
 A memória preserva a cadeia do HealthOS de ponta a ponta:
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":48,"rankSpacing":58}}}%%
 flowchart LR
-    L["texto literal"] --> A["ASL"]
-    A --> D["v1..v15 (VDLP)"]
-    D --> G[".aje → .ire → .e → .epe (GEM)"]
-    G --> S["3 stores"]
-    S -.->|"insight → citação (volta)"| L
+    L("texto literal") --> A("ASL")
+    A --> D("v1..v15 · VDLP")
+    D --> G(".aje → .ire → .e → .epe · GEM")
+    G --> S(["3 stores"])
+    S -.->|"insight → citação · volta"| L
+
+    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
+    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
+    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
+    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
+    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
+    class L gray
+    class A teal
+    class D indigo
+    class G purple
+    class S blue
 ```
 
 Cada trecho de evidência aponta para seu `gem_event_id`; cada nó/estado guarda sua
