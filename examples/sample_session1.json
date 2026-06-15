@@ -1,0 +1,59 @@
+{
+  "patient_id": "PACIENTE_001",
+  "episode": {
+    "episode_id": "PACIENTE_001_S1",
+    "session_id": "S1",
+    "session_date": "2026-03-04",
+    "transcript_ref": "transcripts/PACIENTE_001_S1.txt",
+    "synthesis_text": "Perfil internalizante: valência negativa, foco no passado, baixa agência. Luto recente e insônia dominam o discurso.",
+    "source_refs": { "asl": "PACIENTE_001_S1_ASL.json", "vdlp": "PACIENTE_001_S1_VDLP.json", "gem": "PACIENTE_001_S1_GEM.json" }
+  },
+  "evidence_chunks": [
+    { "chunk_id": "PACIENTE_001_S1_C1", "text": "A minha mãe morreu em janeiro e desde então eu não durmo direito", "provenance": { "source_layer": "gem", "source_path": "gem.aje[0].literal_text", "gem_event_id": "E1_LUTO_DISCLOSURE" } },
+    { "chunk_id": "PACIENTE_001_S1_C2", "text": "Eu fico acordado pensando no que eu podia ter feito diferente", "provenance": { "source_layer": "gem", "source_path": "gem.aje[1].literal_text", "gem_event_id": "E2_RUMINACAO" } },
+    { "chunk_id": "PACIENTE_001_S1_C3", "text": "Não sei, acho que nada que eu faça vai mudar isso", "provenance": { "source_layer": "gem", "source_path": "gem.aje[2].literal_text", "gem_event_id": "E3_BAIXA_AGENCIA" } }
+  ],
+  "dimensional_state": {
+    "state_id": "PACIENTE_001_S1_STATE",
+    "session_date": "2026-03-04",
+    "dominant_pattern": "Perfil internalizante com baixa agência",
+    "dimensions": {
+      "v1_valencia_emocional": -0.62,
+      "v2_arousal_ativacao": 0.40,
+      "v3_coerencia_narrativa": 0.78,
+      "v4_complexidade_sintatica": 0.55,
+      "v5_orientacao_temporal": { "passado": 0.62, "presente": 0.30, "futuro": 0.08 },
+      "v6_densidade_autorreferencia": 0.72,
+      "v7_orientacao_social": 0.25,
+      "v8_flexibilidade_cognitiva": 0.30,
+      "v9_senso_agencia": 0.22,
+      "v10_fragmentacao_discurso": 0.35,
+      "v11_densidade_ideias": 0.50,
+      "v12_certeza_incerteza": -0.30,
+      "v13_padroes_conectividade": 0.55,
+      "v14_comunicacao_pragmatica": 0.70,
+      "v15_prosodia_emocional": null
+    }
+  },
+  "gem": {
+    "events": [
+      { "event_id": "E1_LUTO_DISCLOSURE", "literal_text": "A minha mãe morreu em janeiro e desde então eu não durmo direito", "semantic_summary": "Revelação do luto materno ligado à insônia.", "dimensional_properties": { "affective_valence": -0.7, "arousal_level": 0.5, "agency": 0.2 }, "paralinguistic_context": { "dominant_emotion": "tristeza" }, "valid_from": "2026-03-04", "valid_to": null },
+      { "event_id": "E2_RUMINACAO", "literal_text": "Eu fico acordado pensando no que eu podia ter feito diferente", "semantic_summary": "Ruminação noturna com culpa.", "dimensional_properties": { "affective_valence": -0.6, "arousal_level": 0.6, "agency": 0.25 }, "paralinguistic_context": { "dominant_emotion": "culpa" }, "valid_from": "2026-03-04", "valid_to": null },
+      { "event_id": "E3_BAIXA_AGENCIA", "literal_text": "Não sei, acho que nada que eu faça vai mudar isso", "semantic_summary": "Sensação de impotência / baixa agência.", "dimensional_properties": { "affective_valence": -0.5, "agency": 0.15, "certainty": 0.3 }, "paralinguistic_context": { "dominant_emotion": "desesperança" }, "valid_from": "2026-03-04", "valid_to": null }
+    ],
+    "edges": [
+      { "edge_id": "E1_LUTO_DISCLOSURE__E2_RUMINACAO", "source_event_id": "E1_LUTO_DISCLOSURE", "target_event_id": "E2_RUMINACAO", "directionality": "causal", "influence_magnitude": 0.8, "causal_strength": 0.82, "semantic_similarity": 0.6, "temporal_lag": 0, "valid_from": "2026-03-04", "valid_to": null },
+      { "edge_id": "E2_RUMINACAO__E3_BAIXA_AGENCIA", "source_event_id": "E2_RUMINACAO", "target_event_id": "E3_BAIXA_AGENCIA", "directionality": "causal", "influence_magnitude": 0.7, "causal_strength": 0.78, "semantic_similarity": 0.55, "temporal_lag": 0, "valid_from": "2026-03-04", "valid_to": null }
+    ],
+    "clusters": [
+      { "cluster_id": "C_LUTO_RUMINACAO", "label": "Núcleo de luto e ruminação", "event_ids": ["E1_LUTO_DISCLOSURE", "E2_RUMINACAO"], "hitop_spectrum": "Internalizing", "semantic_centrality": 0.85, "relational_density": 0.80, "novelty_score": 0.4, "cluster_role": "friction", "valid_from": "2026-03-04", "valid_to": null },
+      { "cluster_id": "C_AGENCIA", "label": "Senso de agência", "event_ids": ["E3_BAIXA_AGENCIA"], "hitop_spectrum": "Internalizing", "semantic_centrality": 0.6, "relational_density": 0.5, "novelty_score": 0.3, "cluster_role": "friction", "valid_from": "2026-03-04", "valid_to": null }
+    ],
+    "flows": [
+      { "flow_id": "F_LUTO_PARA_IMPOTENCIA", "description": "Luto -> ruminação -> impotência: trajetória que cristalizou baixa agência.", "source_events": ["E1_LUTO_DISCLOSURE"], "target_clusters": ["C_AGENCIA"], "causal_strength": 0.83, "directionality": "unidirectional", "mapped_dimensions": { "v1_valencia": -0.62, "v9_agencia": 0.22 }, "kind": "diagnostic", "valid_from": "2026-03-04", "valid_to": null }
+    ],
+    "pathways": [
+      { "pathway_id": "EPE_RECLAMAR_AGENCIA", "description": "Reconverter ruminação em ação dirigida; recuperar senso de agência via pequenos passos.", "source_friction_clusters": ["C_LUTO_RUMINACAO", "C_AGENCIA"], "leverage_clusters": [], "key_leverage_events": [], "required_conditions": "Foco terapêutico na aliança; psicoeducação sobre ruminação.", "emergenable_potential_score": 0.45, "kind": "prognostic", "valid_from": "2026-03-04", "valid_to": null }
+    ]
+  }
+}

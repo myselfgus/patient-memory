@@ -1,0 +1,9 @@
+# Núcleo (obrigatório para ingestão + recuperação)
+numpy>=1.24
+
+# Recomendado: validação da projeção contra o schema na ingestão
+jsonschema>=4.0
+
+# Opcional: apenas para expor a memória como servidor MCP a um agente
+# (instale separadamente se for usar mcp_server.py)
+#   pip install "mcp[cli]>=1.2"

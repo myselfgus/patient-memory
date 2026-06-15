@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://healthos/schemas/memory_projection.schema.json",
+  "title": "HealthOS Patient Memory — Projeção de Sessão",
+  "description": "Contrato de saída do prompt project_to_memory: distila ASL+VDLP+GEM nos registros dos três stores. Sem camada de confiança nesta versão.",
+  "type": "object",
+  "required": ["patient_id", "episode", "evidence_chunks", "dimensional_state", "gem"],
+  "additionalProperties": false,
+  "properties": {
+    "patient_id": { "type": "string", "minLength": 1 },
+    "episode": { "$ref": "#/$defs/episode" },
+    "evidence_chunks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence_chunk" }
+    },
+    "dimensional_state": { "$ref": "#/$defs/dimensional_state" },
+    "gem": { "$ref": "#/$defs/gem" }
+  },
+  "$defs": {
+    "episode": {
+      "type": "object",
+      "required": ["episode_id", "session_date"],
+      "additionalProperties": false,
+      "properties": {
+        "episode_id": { "type": "string", "minLength": 1 },
+        "session_id": { "type": ["string", "null"] },
+        "session_date": { "type": "string", "description": "ISO-8601" },
+        "transcript_ref": { "type": ["string", "null"] },
+        "synthesis_text": { "type": ["string", "null"], "description": "Summary-only." },
+        "source_refs": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "evidence_chunk": {
+      "type": "object",
+      "required": ["chunk_id", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "chunk_id": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1, "description": "Citação literal exata." },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "source_layer": { "type": ["string", "null"], "enum": ["gem", "vdlp", "asl", null] },
+            "source_path": { "type": ["string", "null"] },
+            "gem_event_id": { "type": ["string", "null"], "description": "Costura evidência<->grafo." }
+          }
+        }
+      }
+    },
+    "dimensional_state": {
+      "type": "object",
+      "required": ["state_id", "dimensions"],
+      "additionalProperties": false,
+      "properties": {
+        "state_id": { "type": "string", "minLength": 1 },
+        "session_date": { "type": ["string", "null"] },
+        "dominant_pattern": { "type": ["string", "null"] },
+        "dimensions": { "$ref": "#/$defs/dimensions" }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "description": "Apenas os scores de v1..v15 (sem confiança, cálculo ou evidências).",
+      "additionalProperties": false,
+      "properties": {
+        "v1_valencia_emocional": { "type": ["number", "null"], "minimum": -1, "maximum": 1 },
+        "v2_arousal_ativacao": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v3_coerencia_narrativa": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v4_complexidade_sintatica": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v5_orientacao_temporal": {
+          "type": "object",
+          "required": ["passado", "presente", "futuro"],
+          "additionalProperties": false,
+          "properties": {
+            "passado": { "type": "number", "minimum": 0, "maximum": 1 },
+            "presente": { "type": "number", "minimum": 0, "maximum": 1 },
+            "futuro": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "v6_densidade_autorreferencia": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v7_orientacao_social": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v8_flexibilidade_cognitiva": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v9_senso_agencia": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v10_fragmentacao_discurso": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v11_densidade_ideias": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v12_certeza_incerteza": { "type": ["number", "null"], "minimum": -1, "maximum": 1 },
+        "v13_padroes_conectividade": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v14_comunicacao_pragmatica": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "v15_prosodia_emocional": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+      }
+    },
+    "gem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "events": { "type": "array", "items": { "$ref": "#/$defs/gem_event" } },
+        "edges": { "type": "array", "items": { "$ref": "#/$defs/gem_edge" } },
+        "clusters": { "type": "array", "items": { "$ref": "#/$defs/gem_cluster" } },
+        "flows": { "type": "array", "items": { "$ref": "#/$defs/gem_flow" } },
+        "pathways": { "type": "array", "items": { "$ref": "#/$defs/gem_pathway" } }
+      }
+    },
+    "gem_event": {
+      "type": "object",
+      "required": ["event_id"],
+      "additionalProperties": false,
+      "properties": {
+        "event_id": { "type": "string", "minLength": 1 },
+        "literal_text": { "type": ["string", "null"] },
+        "semantic_summary": { "type": ["string", "null"] },
+        "dimensional_properties": { "type": "object", "additionalProperties": true },
+        "paralinguistic_context": { "type": "object", "additionalProperties": true },
+        "valid_from": { "type": ["string", "null"] },
+        "valid_to": { "type": ["string", "null"] }
+      }
+    },
+    "gem_edge": {
+      "type": "object",
+      "required": ["edge_id", "source_event_id", "target_event_id"],
+      "additionalProperties": false,
+      "properties": {
+        "edge_id": { "type": "string", "minLength": 1 },
+        "source_event_id": { "type": "string" },
+        "target_event_id": { "type": "string" },
+        "directionality": { "type": ["string", "null"],
+          "enum": ["causal", "correlational", "bidirectional", "inhibitory", null] },
+        "influence_magnitude": { "type": ["number", "null"] },
+        "causal_strength": { "type": ["number", "null"] },
+        "semantic_similarity": { "type": ["number", "null"] },
+        "temporal_lag": { "type": ["integer", "null"] },
+        "valid_from": { "type": ["string", "null"] },
+        "valid_to": { "type": ["string", "null"] }
+      }
+    },
+    "gem_cluster": {
+      "type": "object",
+      "required": ["cluster_id"],
+      "additionalProperties": false,
+      "properties": {
+        "cluster_id": { "type": "string", "minLength": 1,
+          "description": "ID lógico ESTÁVEL entre sessões." },
+        "label": { "type": ["string", "null"] },
+        "event_ids": { "type": "array", "items": { "type": "string" } },
+        "hitop_spectrum": { "type": ["string", "null"] },
+        "semantic_centrality": { "type": ["number", "null"] },
+        "relational_density": { "type": ["number", "null"] },
+        "novelty_score": { "type": ["number", "null"] },
+        "cluster_role": { "type": "string", "enum": ["friction", "leverage", "neutral"] },
+        "valid_from": { "type": ["string", "null"] },
+        "valid_to": { "type": ["string", "null"] }
+      }
+    },
+    "gem_flow": {
+      "type": "object",
+      "required": ["flow_id"],
+      "additionalProperties": false,
+      "properties": {
+        "flow_id": { "type": "string", "minLength": 1 },
+        "description": { "type": ["string", "null"] },
+        "source_events": { "type": "array", "items": { "type": "string" } },
+        "target_clusters": { "type": "array", "items": { "type": "string" } },
+        "causal_strength": { "type": ["number", "null"] },
+        "directionality": { "type": ["string", "null"] },
+        "mapped_dimensions": { "type": "object", "additionalProperties": true },
+        "kind": { "type": "string", "const": "diagnostic" },
+        "valid_from": { "type": ["string", "null"] },
+        "valid_to": { "type": ["string", "null"] }
+      }
+    },
+    "gem_pathway": {
+      "type": "object",
+      "required": ["pathway_id"],
+      "additionalProperties": false,
+      "properties": {
+        "pathway_id": { "type": "string", "minLength": 1 },
+        "description": { "type": ["string", "null"] },
+        "source_friction_clusters": { "type": "array", "items": { "type": "string" } },
+        "leverage_clusters": { "type": "array", "items": { "type": "string" } },
+        "key_leverage_events": { "type": "array", "items": { "type": "string" } },
+        "required_conditions": { "type": ["string", "null"] },
+        "emergenable_potential_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "kind": { "type": "string", "const": "prognostic" },
+        "valid_from": { "type": ["string", "null"] },
+        "valid_to": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

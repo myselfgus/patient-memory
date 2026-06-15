@@ -1,0 +1,59 @@
+{
+  "patient_id": "PACIENTE_001",
+  "episode": {
+    "episode_id": "PACIENTE_001_S2",
+    "session_id": "S2",
+    "session_date": "2026-05-13",
+    "transcript_ref": "transcripts/PACIENTE_001_S2.txt",
+    "synthesis_text": "Melhora parcial: valência menos negativa, surgimento de orientação ao futuro e da escrita como recurso expressivo. Agência ainda frágil mas em ascensão.",
+    "source_refs": { "asl": "PACIENTE_001_S2_ASL.json", "vdlp": "PACIENTE_001_S2_VDLP.json", "gem": "PACIENTE_001_S2_GEM.json" }
+  },
+  "evidence_chunks": [
+    { "chunk_id": "PACIENTE_001_S2_C1", "text": "Comecei a escrever umas cartas pra ela, e isso me acalma na hora de dormir", "provenance": { "source_layer": "gem", "source_path": "gem.aje[0].literal_text", "gem_event_id": "E4_ESCRITA_RECURSO" } },
+    { "chunk_id": "PACIENTE_001_S2_C2", "text": "Ainda penso muito, mas teve noite que dormi melhor", "provenance": { "source_layer": "gem", "source_path": "gem.aje[1].literal_text", "gem_event_id": "E5_SONO_PARCIAL" } },
+    { "chunk_id": "PACIENTE_001_S2_C3", "text": "Talvez semana que vem eu volte pra academia", "provenance": { "source_layer": "gem", "source_path": "gem.aje[2].literal_text", "gem_event_id": "E6_PROJETO_FUTURO" } }
+  ],
+  "dimensional_state": {
+    "state_id": "PACIENTE_001_S2_STATE",
+    "session_date": "2026-05-13",
+    "dominant_pattern": "Internalizante em remissão parcial com recurso expressivo emergente",
+    "dimensions": {
+      "v1_valencia_emocional": -0.28,
+      "v2_arousal_ativacao": 0.38,
+      "v3_coerencia_narrativa": 0.82,
+      "v4_complexidade_sintatica": 0.58,
+      "v5_orientacao_temporal": { "passado": 0.45, "presente": 0.33, "futuro": 0.22 },
+      "v6_densidade_autorreferencia": 0.65,
+      "v7_orientacao_social": 0.35,
+      "v8_flexibilidade_cognitiva": 0.48,
+      "v9_senso_agencia": 0.41,
+      "v10_fragmentacao_discurso": 0.28,
+      "v11_densidade_ideias": 0.55,
+      "v12_certeza_incerteza": -0.05,
+      "v13_padroes_conectividade": 0.60,
+      "v14_comunicacao_pragmatica": 0.74,
+      "v15_prosodia_emocional": null
+    }
+  },
+  "gem": {
+    "events": [
+      { "event_id": "E4_ESCRITA_RECURSO", "literal_text": "Comecei a escrever umas cartas pra ela, e isso me acalma na hora de dormir", "semantic_summary": "Escrita expressiva como recurso de autorregulação.", "dimensional_properties": { "affective_valence": -0.1, "agency": 0.55, "novelty_score": 0.7 }, "paralinguistic_context": { "dominant_emotion": "esperança" }, "valid_from": "2026-05-13", "valid_to": null },
+      { "event_id": "E5_SONO_PARCIAL", "literal_text": "Ainda penso muito, mas teve noite que dormi melhor", "semantic_summary": "Melhora parcial do sono.", "dimensional_properties": { "affective_valence": 0.1, "agency": 0.4 }, "paralinguistic_context": { "dominant_emotion": "alívio" }, "valid_from": "2026-05-13", "valid_to": null },
+      { "event_id": "E6_PROJETO_FUTURO", "literal_text": "Talvez semana que vem eu volte pra academia", "semantic_summary": "Projeção de ação futura (retomar exercício).", "dimensional_properties": { "affective_valence": 0.3, "agency": 0.6, "temporal_significance": 0.7 }, "paralinguistic_context": { "dominant_emotion": "esperança" }, "valid_from": "2026-05-13", "valid_to": null }
+    ],
+    "edges": [
+      { "edge_id": "E4_ESCRITA_RECURSO__E5_SONO_PARCIAL", "source_event_id": "E4_ESCRITA_RECURSO", "target_event_id": "E5_SONO_PARCIAL", "directionality": "causal", "influence_magnitude": 0.6, "causal_strength": 0.7, "semantic_similarity": 0.5, "temporal_lag": 0, "valid_from": "2026-05-13", "valid_to": null },
+      { "edge_id": "E4_ESCRITA_RECURSO__E6_PROJETO_FUTURO", "source_event_id": "E4_ESCRITA_RECURSO", "target_event_id": "E6_PROJETO_FUTURO", "directionality": "correlational", "influence_magnitude": 0.5, "causal_strength": 0.55, "semantic_similarity": 0.45, "temporal_lag": 0, "valid_from": "2026-05-13", "valid_to": null }
+    ],
+    "clusters": [
+      { "cluster_id": "C_LUTO_RUMINACAO", "label": "Núcleo de luto e ruminação (em redução)", "event_ids": ["E5_SONO_PARCIAL"], "hitop_spectrum": "Internalizing", "semantic_centrality": 0.65, "relational_density": 0.78, "novelty_score": 0.4, "cluster_role": "friction", "valid_from": "2026-05-13", "valid_to": null },
+      { "cluster_id": "C_ESCRITA_EXPRESSIVA", "label": "Escrita expressiva como recurso", "event_ids": ["E4_ESCRITA_RECURSO", "E6_PROJETO_FUTURO"], "hitop_spectrum": "None/Subthreshold", "semantic_centrality": 0.7, "relational_density": 0.82, "novelty_score": 0.8, "cluster_role": "leverage", "valid_from": "2026-05-13", "valid_to": null }
+    ],
+    "flows": [
+      { "flow_id": "F_RECURSO_PARA_SONO", "description": "Escrita expressiva -> autorregulação -> melhora do sono e abertura ao futuro.", "source_events": ["E4_ESCRITA_RECURSO"], "target_clusters": ["C_ESCRITA_EXPRESSIVA"], "causal_strength": 0.8, "directionality": "convergent", "mapped_dimensions": { "v1_valencia": -0.28, "v9_agencia": 0.41 }, "kind": "diagnostic", "valid_from": "2026-05-13", "valid_to": null }
+    ],
+    "pathways": [
+      { "pathway_id": "EPE_RECLAMAR_AGENCIA", "description": "Canalizar a escrita expressiva (alavancagem) para reduzir a ruminação (atrito) e reconstruir agência por meio de projetos concretos como retomar o exercício.", "source_friction_clusters": ["C_LUTO_RUMINACAO"], "leverage_clusters": ["C_ESCRITA_EXPRESSIVA"], "key_leverage_events": ["E4_ESCRITA_RECURSO", "E6_PROJETO_FUTURO"], "required_conditions": "Sustentar a escrita como prática; transformar intenção (academia) em plano com passos graduais.", "emergenable_potential_score": 0.72, "kind": "prognostic", "valid_from": "2026-05-13", "valid_to": null }
+    ]
+  }
+}
