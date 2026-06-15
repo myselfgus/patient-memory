@@ -5,7 +5,7 @@ do HealthOS — **ASL**, **VDLP** e **GEM**. Cada camada vai para o store que te
 forma do seu dado, e tudo é costurado por uma espinha **bi-temporal** com
 proveniência, namespaced por paciente.
 
-> **Tese de modelagem:** as três camadas **não** são a mesma coisa armazenada do
+> **Tese de modelagem.** As três camadas **não** são a mesma coisa armazenada do
 > mesmo jeito. ASL é episódio/evidência, VDLP é um vetor-estado interpretável, GEM
 > é um grafo causal. A memória mais poderosa respeita essas três formas em vez de
 > achatar tudo num único índice vetorial.
@@ -15,7 +15,7 @@ proveniência, namespaced por paciente.
 ## Visão geral
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":50,"rankSpacing":62}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","primaryColor":"#faf9f5","primaryTextColor":"#141413","primaryBorderColor":"#b0aea5","lineColor":"#b0aea5","clusterBkg":"#f2f1ea","clusterBorder":"#e8e6dc","edgeLabelBackground":"#faf9f5"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":50,"rankSpacing":62}}}%%
 flowchart TB
     subgraph SRC["Camadas do HealthOS · entrada"]
         direction LR
@@ -49,22 +49,20 @@ flowchart TB
     S3 --> HYB
     HYB -->|bundle summary-only| AGENT
 
-    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
-    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
-    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
-    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
-    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
-    classDef orange fill:#FFF1E0,stroke:#FF9F0A,stroke-width:1.2px,color:#3D2A00
-    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
-    class ASL teal
-    class VDLP indigo
-    class GEM purple
-    class PROJ,SCHEMA gray
-    class S1 blue
-    class S2 green
-    class S3 orange
-    class HYB indigo
-    class AGENT blue
+    classDef orange fill:#f6ddd1,stroke:#d97757,stroke-width:1.4px,color:#141413
+    classDef blue fill:#dde9f3,stroke:#6a9bcc,stroke-width:1.4px,color:#141413
+    classDef green fill:#e2e8d4,stroke:#788c5d,stroke-width:1.4px,color:#141413
+    classDef sand fill:#faf9f5,stroke:#b0aea5,stroke-width:1px,color:#141413
+    classDef ink fill:#141413,stroke:#141413,stroke-width:1px,color:#faf9f5
+    class ASL orange
+    class VDLP blue
+    class GEM green
+    class PROJ,SCHEMA sand
+    class S1 orange
+    class S2 blue
+    class S3 green
+    class HYB sand
+    class AGENT ink
 ```
 
 ---
@@ -81,7 +79,7 @@ Tudo num único arquivo **SQLite**. O grafo só é usado onde causalidade/tempor
 importam (GEM) — ASL e VDLP não são forçados num grafo.
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":42,"rankSpacing":58}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","primaryColor":"#faf9f5","primaryTextColor":"#141413","primaryBorderColor":"#b0aea5","lineColor":"#b0aea5","clusterBkg":"#f2f1ea","clusterBorder":"#e8e6dc","edgeLabelBackground":"#faf9f5"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":42,"rankSpacing":58}}}%%
 flowchart LR
     subgraph SQLite["memory.db · namespaced por patient_id"]
         direction TB
@@ -102,16 +100,14 @@ flowchart LR
     GC --> GF
     GC --> GP
 
-    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
-    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
-    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
-    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
-    classDef orange fill:#FFF1E0,stroke:#FF9F0A,stroke-width:1.2px,color:#3D2A00
-    class E,EC blue
-    class DS green
-    class GE,GED purple
-    class GC teal
-    class GF,GP orange
+    classDef orange fill:#f6ddd1,stroke:#d97757,stroke-width:1.4px,color:#141413
+    classDef blue fill:#dde9f3,stroke:#6a9bcc,stroke-width:1.4px,color:#141413
+    classDef green fill:#e2e8d4,stroke:#788c5d,stroke-width:1.4px,color:#141413
+    class E,EC orange
+    class DS blue
+    class GE,GED green
+    class GC orange
+    class GF,GP blue
 ```
 
 ### Espinha bi-temporal
@@ -127,7 +123,7 @@ IDs lógicos estáveis (ex.: `C_LUTO_RUMINACAO`, `EPE_RECLAMAR_AGENCIA`) fazem a
 memória **acumular e superar** ao longo do tratamento.
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","actorBkg":"#EAF2FF","actorBorder":"#0A84FF","actorTextColor":"#0A2540","signalColor":"#8E8E93","signalTextColor":"#1D1D1F","noteBkgColor":"#F4EBFF","noteBorderColor":"#BF5AF2","noteTextColor":"#1D1D1F","sequenceNumberColor":"#FFFFFF"}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","actorBkg":"#f6ddd1","actorBorder":"#d97757","actorTextColor":"#141413","signalColor":"#b0aea5","signalTextColor":"#141413","noteBkgColor":"#dde9f3","noteBorderColor":"#6a9bcc","noteTextColor":"#141413","sequenceNumberColor":"#faf9f5"}}}%%
 sequenceDiagram
     participant S2 as Sessão (mar)
     participant S5 as Sessão (jun)
@@ -178,15 +174,30 @@ caminhos emergenáveis e o contexto montado para o LLM.
 ### 2. Pipeline real, por sessão
 
 ```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","primaryColor":"#faf9f5","primaryTextColor":"#141413","primaryBorderColor":"#b0aea5","lineColor":"#b0aea5","edgeLabelBackground":"#faf9f5"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":46,"rankSpacing":56}}}%%
 flowchart TD
-    T["transcrição bruta"] -->|skills existentes| A["ASL.json + VDLP.json + GEM.json"]
-    A -->|prompt project_to_memory.md| P["projeção.json"]
+    T("transcrição bruta") -->|skills existentes| A("ASL.json + VDLP.json + GEM.json")
+    A -->|prompt project_to_memory.md| P("projeção.json")
     P -->|valida contra schema| V{"schema ok?"}
-    V -->|não| ERR["ValueError: projeção inválida"]
-    V -->|sim| I["ingest_projection"]
-    I --> DB[("SQLite — 3 stores<br/>upsert bi-temporal")]
-    DB --> R["recuperação híbrida"]
-    R --> LLM["agente LLM"]
+    V -->|não| ERR("ValueError:<br/>projeção inválida")
+    V -->|sim| I("ingest_projection")
+    I --> DB[("SQLite · 3 stores<br/>upsert bi-temporal")]
+    DB --> R("recuperação híbrida")
+    R --> LLM(["agente LLM"])
+
+    classDef orange fill:#f6ddd1,stroke:#d97757,stroke-width:1.4px,color:#141413
+    classDef blue fill:#dde9f3,stroke:#6a9bcc,stroke-width:1.4px,color:#141413
+    classDef green fill:#e2e8d4,stroke:#788c5d,stroke-width:1.4px,color:#141413
+    classDef sand fill:#faf9f5,stroke:#b0aea5,stroke-width:1px,color:#141413
+    classDef ink fill:#141413,stroke:#141413,stroke-width:1px,color:#faf9f5
+    class T,A sand
+    class P orange
+    class V sand
+    class ERR orange
+    class I blue
+    class DB green
+    class R blue
+    class LLM ink
 ```
 
 **a) Gerar a projeção (LLM):** envie ao modelo o conteúdo de
@@ -225,7 +236,7 @@ bundle = retrieve.assemble_context(conn, "PACIENTE_001",
 expande o contexto relacional → trajetória dá a tendência**.
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":46,"rankSpacing":54}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","primaryColor":"#faf9f5","primaryTextColor":"#141413","primaryBorderColor":"#b0aea5","lineColor":"#b0aea5","edgeLabelBackground":"#faf9f5"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":46,"rankSpacing":54}}}%%
 flowchart LR
     Q(["query do agente"]) --> V("1 · busca vetorial<br/>nos trechos de evidência")
     V -->|gem_event_id na proveniência| G("2 · expande vizinhança<br/>causal no grafo GEM")
@@ -234,17 +245,18 @@ flowchart LR
     S --> B("bundle enxuto<br/>+ disclaimer")
     B --> A(["agente LLM"])
 
-    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
-    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
-    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
-    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
-    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
-    class Q gray
-    class V blue
-    class G indigo
-    class P purple
-    class S green
-    class B,A blue
+    classDef orange fill:#f6ddd1,stroke:#d97757,stroke-width:1.4px,color:#141413
+    classDef blue fill:#dde9f3,stroke:#6a9bcc,stroke-width:1.4px,color:#141413
+    classDef green fill:#e2e8d4,stroke:#788c5d,stroke-width:1.4px,color:#141413
+    classDef sand fill:#faf9f5,stroke:#b0aea5,stroke-width:1px,color:#141413
+    classDef ink fill:#141413,stroke:#141413,stroke-width:1px,color:#faf9f5
+    class Q sand
+    class V orange
+    class G blue
+    class P green
+    class S orange
+    class B blue
+    class A ink
 ```
 
 Concretamente:
@@ -266,7 +278,7 @@ diagnósticos — o que **emergiu**) e `.epe` (caminhos emergenáveis — o que 
 emergir, ligando atrito a alavancagem).
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":46,"rankSpacing":70}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","primaryColor":"#faf9f5","primaryTextColor":"#141413","primaryBorderColor":"#b0aea5","lineColor":"#b0aea5","clusterBkg":"#f2f1ea","clusterBorder":"#e8e6dc","edgeLabelBackground":"#faf9f5"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":46,"rankSpacing":70}}}%%
 flowchart LR
     subgraph AJE[".aje · eventos"]
         direction TB
@@ -285,10 +297,10 @@ flowchart LR
     cF ==>|".e · fluxo diagnóstico"| cL
     cF -.->|".epe · EPE_RECLAMAR_AGENCIA<br/>potencial emergenável"| cL
 
-    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
-    classDef friction fill:#FFE9F0,stroke:#FF2D55,stroke-width:1.4px,color:#3D0011
-    classDef leverage fill:#E6F9EE,stroke:#30D158,stroke-width:1.4px,color:#06321A
-    class e1,e2,e3 gray
+    classDef sand fill:#faf9f5,stroke:#b0aea5,stroke-width:1px,color:#141413
+    classDef friction fill:#f6ddd1,stroke:#d97757,stroke-width:1.6px,color:#141413
+    classDef leverage fill:#e2e8d4,stroke:#788c5d,stroke-width:1.6px,color:#141413
+    class e1,e2,e3 sand
     class cF friction
     class cL leverage
 ```
@@ -298,7 +310,7 @@ flowchart LR
 ## Como enviar ao LLM / atrelar a um agente
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","clusterBkg":"#F5F5F7","clusterBorder":"#E5E5EA","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":40,"rankSpacing":58}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","primaryColor":"#faf9f5","primaryTextColor":"#141413","primaryBorderColor":"#b0aea5","lineColor":"#b0aea5","clusterBkg":"#f2f1ea","clusterBorder":"#e8e6dc","edgeLabelBackground":"#faf9f5"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":40,"rankSpacing":58}}}%%
 flowchart TB
     DB[("memory.db")]
     subgraph A["Opção A · Servidor MCP · read-only"]
@@ -321,17 +333,17 @@ flowchart TB
     T1 & T2 & T3 & T4 & T5 & T6 --> CLIENT
     DB --> AC --> PROMPT
 
-    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
-    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
-    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
-    classDef green fill:#E6F9EE,stroke:#30D158,stroke-width:1.2px,color:#0A2540
-    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
-    class DB indigo
-    class MCP blue
-    class T1,T2,T3,T4,T5,T6 teal
+    classDef orange fill:#f6ddd1,stroke:#d97757,stroke-width:1.4px,color:#141413
+    classDef blue fill:#dde9f3,stroke:#6a9bcc,stroke-width:1.4px,color:#141413
+    classDef green fill:#e2e8d4,stroke:#788c5d,stroke-width:1.4px,color:#141413
+    classDef sand fill:#faf9f5,stroke:#b0aea5,stroke-width:1px,color:#141413
+    classDef ink fill:#141413,stroke:#141413,stroke-width:1px,color:#faf9f5
+    class DB ink
+    class MCP orange
+    class T1,T2,T3,T4,T5,T6 blue
     class AC green
-    class CLIENT blue
-    class PROMPT gray
+    class CLIENT ink
+    class PROMPT sand
 ```
 
 ### A) Servidor MCP (recomendado)
@@ -382,33 +394,13 @@ VDLP colapsa cada sessão num ponto de ℳ. Para similaridade usamos uma ordena�
 3 componentes baricêntricos passado/presente/futuro). Essa ordem é um **contrato**:
 não reordene sem migrar os vetores gravados.
 
-```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"15px","lineColor":"#C7C7CC"}}}%%
-mindmap
-  root((Espaço Mental ℳ))
-    Afeto
-      v1 valência
-      v2 arousal
-      v15 prosódia emocional
-    Discurso
-      v3 coerência narrativa
-      v4 complexidade sintática
-      v10 fragmentação
-      v11 densidade de ideias
-    Tempo
-      v5 passado
-      v5 presente
-      v5 futuro
-    Self e mundo
-      v6 autorreferência
-      v7 orientação social
-      v9 senso de agência
-    Cognição
-      v8 flexibilidade
-      v12 certeza/incerteza
-      v13 conectividade
-      v14 pragmática
-```
+| Grupo | Dimensões |
+|---|---|
+| **Afeto** | v1 valência · v2 arousal · v15 prosódia emocional |
+| **Discurso** | v3 coerência narrativa · v4 complexidade sintática · v10 fragmentação · v11 densidade de ideias |
+| **Tempo** | v5 passado · v5 presente · v5 futuro |
+| **Self e mundo** | v6 autorreferência · v7 orientação social · v9 senso de agência |
+| **Cognição** | v8 flexibilidade · v12 certeza/incerteza · v13 conectividade · v14 pragmática |
 
 ---
 
@@ -459,7 +451,7 @@ patient-memory/
 A memória preserva a cadeia do HealthOS de ponta a ponta:
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontFamily":"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif","fontSize":"14px","lineColor":"#8E8E93","edgeLabelBackground":"#FFFFFF"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":48,"rankSpacing":58}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Poppins, Arial, Helvetica, sans-serif","fontSize":"14px","primaryColor":"#faf9f5","primaryTextColor":"#141413","primaryBorderColor":"#b0aea5","lineColor":"#b0aea5","edgeLabelBackground":"#faf9f5"},"flowchart":{"curve":"basis","htmlLabels":true,"padding":14,"nodeSpacing":48,"rankSpacing":58}}}%%
 flowchart LR
     L("texto literal") --> A("ASL")
     A --> D("v1..v15 · VDLP")
@@ -467,16 +459,16 @@ flowchart LR
     G --> S(["3 stores"])
     S -.->|"insight → citação · volta"| L
 
-    classDef teal fill:#E3F7FF,stroke:#32ADE6,stroke-width:1.2px,color:#0A2540
-    classDef indigo fill:#ECECFF,stroke:#5E5CE6,stroke-width:1.2px,color:#1D1D1F
-    classDef purple fill:#F4EBFF,stroke:#BF5AF2,stroke-width:1.2px,color:#1D1D1F
-    classDef blue fill:#EAF2FF,stroke:#0A84FF,stroke-width:1.2px,color:#0A2540
-    classDef gray fill:#F2F2F7,stroke:#C7C7CC,stroke-width:1px,color:#1D1D1F
-    class L gray
-    class A teal
-    class D indigo
-    class G purple
-    class S blue
+    classDef orange fill:#f6ddd1,stroke:#d97757,stroke-width:1.4px,color:#141413
+    classDef blue fill:#dde9f3,stroke:#6a9bcc,stroke-width:1.4px,color:#141413
+    classDef green fill:#e2e8d4,stroke:#788c5d,stroke-width:1.4px,color:#141413
+    classDef sand fill:#faf9f5,stroke:#b0aea5,stroke-width:1px,color:#141413
+    classDef ink fill:#141413,stroke:#141413,stroke-width:1px,color:#faf9f5
+    class L sand
+    class A orange
+    class D blue
+    class G green
+    class S ink
 ```
 
 Cada trecho de evidência aponta para seu `gem_event_id`; cada nó/estado guarda sua
