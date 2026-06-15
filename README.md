@@ -75,7 +75,7 @@ flowchart LR
     end
 
     E --> EC
-    EC -. provenance.gem_event_id .-> GE
+    EC -.->|"provenance.gem_event_id"| GE
     GE --> GED
     GE --> GC
     GC --> GF
@@ -399,7 +399,7 @@ flowchart LR
     A --> D["v1..v15 (VDLP)"]
     D --> G[".aje → .ire → .e → .epe (GEM)"]
     G --> S["3 stores"]
-    S -. "insight → citação (volta)" .-> L
+    S -.->|"insight → citação (volta)"| L
 ```
 
 Cada trecho de evidência aponta para seu `gem_event_id`; cada nó/estado guarda sua
